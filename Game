@@ -1,0 +1,516 @@
+import random
+
+#character stats
+item_hand=0
+item_bag=0
+char_health=20
+char_name=""
+comp_perc=0
+merci=0
+hoarder=0
+cont=0
+
+def random_check( pass_check):
+
+    num_check=random.randrange(1, 10, 1)
+    
+    if num_check >= pass_check:
+        return 1
+    else:
+        return 0
+
+def end_credits():
+    
+    print("")
+    print( "Character played: " + char_name)
+    print( "Completion percent: " + str(comp_perc) + "%")
+    
+    if merci==4:
+        print( char_name + " has earned a title of 'Merciless' for killing everything in the dungeon")
+    if hoarder==10:
+        print( char_name + " has earned a title of 'Hoarder' for finding each gem in the dungeon")
+    if hoarder==10 and merci==4:
+        print( char_name + " has earned a title of 'Legend' for fully completing the game")
+
+    print( " Thank you for playing :)")
+
+def combat( pass_check, enemy_health, enemy_attack, health):
+    
+    player_attack=4
+    check="attack"
+    check2="dodge"
+    x=int(pass_check)
+    
+    if item_hand==1:
+        player_attack=6
+    elif item_hand==2:
+        player_attack=8
+
+    while (enemy_health>0) and (health>0):
+        
+        choice=input( " What should I do? attack/dodge: ")
+
+        while ( choice!=check) and ( choice!=check2):
+            print( "system message: please make sure to type in a correct command")
+            choice=input( " What should I do? attack/dodge: ")
+            print( "\n")
+
+        if choice==check:
+            
+            attack=player_attack
+
+            if random_check( x)==1:
+                print( char_name + " decides to attack and hits")
+
+                if random_check( x)==1:
+                    print( "It's a critical hit!!!")
+                    attack=attack+2
+                    print( "The monster was hit for " + str(attack) + " points of damage")
+                else:
+                    print( "The monster was hit for " + str(attack) + " points of damage")
+
+                enemy_health=enemy_health-int(attack)
+            else:
+                print( "Oh no, the monster managed to dodge the attack")
+            
+            if (enemy_health>0):
+                print( " Now, it is the monster's turn")
+                print( " It swings its blade towards the dwarf andddddd")
+
+                if random_check( x-2)==1: 
+                    print( "the attack hits " + char_name + " takes " + str(enemy_attack) + " damage")
+                    health=health-enemy_attack
+                    print( char_name + " health is now " + str(health) + " /20")
+                    
+                    if random_check( x)==1:
+                        sec_attack=random.randrange(0, 4, 1)
+                        print( " Enemy got another shot in " + char_name + " takes " + str(sec_attack) + " damage")
+                        health=health-sec_attack
+                        print( char_name + " health is now " + str(health) + " /20")
+                else:
+                    print( " it misses, the dwarf is safe to try again")
+        else:
+            print( char_name + " decides to dodge, and is succesful. No damage is taken")
+            
+            if random_check( x)==1:
+                print( " A moment of respite gave him a chance to breathe " + char_name + " has gained 1 health point back")
+                health=health+1
+
+                if (health>20):
+                    health=20
+            elif random_check(2)==1:
+                print( " That was an unlucky dodge and the enemy still got a chance to attack")
+                sec_attack=random.randrange(0, 3, 1)
+                print( " " + char_name + " takes " + str(sec_attack) + " damage")
+                health=health-sec_attack
+                print( char_name + " health is now " + str(health) + " /20")
+
+       
+
+    if (enemy_health<=0):
+        print( " And with a last strong swing " + char_name + " manages to kill the monster")
+        global char_health
+        char_health=health
+        return 0
+    else:
+        print( " Despite his best efforts " + char_name + " has been defeated, who will save his family now?")
+        end_credits()
+        return 1
+
+def character_stats():
+    print( "\n")
+    print( " Character Name: " + char_name)
+    print( " Current Health: " + str(char_health) + "/20")
+    
+    if item_hand==0:
+        print( " Item held: none")
+        print( " Attack Bonus: none")
+    elif item_hand==1:
+        print( " Item held: Dagger")
+        print( " Attack Bonus: +2")
+    else:
+        print( " Item held: Great-Sword")
+        print( " Attack Bonus: +4")
+
+    if item_bag==0:
+        print( " Item bag: empty")
+    else:
+        print( " Item bag: Red Key")
+        print( " Use: It must open something?")
+
+    print( "\n")
+
+print( " A small dwarf awakens in a dark room \n What is he doing there? He does not know.")
+char_name = input(" But he can remember the loud sound of an explosion and his brother yelling his name: ")
+print( " Right, they were working in their mine, making a living as always.")
+print( " But suddenly monsters attacked. \n " + char_name + " thinks: I need to get back and check on him, this place is dangerous.")
+
+choice=input( " What do I do?: look around/info: ")
+check="info"
+check2="look around"
+
+while ( choice!=check) and ( choice!=check2):
+        print( "system message: please make sure to type in a correct command")
+        choice=input( " What do I do? look around/info: ")
+        print( "\n")
+
+if choice==check:
+    print( "Character Information:")
+    character_stats()
+
+print( "\n")
+print( " " + char_name + " looks around the room he is in. \n He thinkts: It looks safe")
+
+choice=input( " What do I do?: There are two doors, I choose to go north/south: ")
+
+check="north"
+check2="south"
+
+while ( choice!=check) and ( choice!=check2):
+    print( "system message: please make sure to type in a correct command")
+    choice=input( " I choose to go north/south: ")
+    print( "\n")
+
+print( "\n")
+
+if choice==check:
+   
+    print( " " + char_name + " looks around the room, it is mostly empty except for one small glistering gem")
+    choice=input( " What do I do? pick up/go back: ")
+    check="pick up"
+    check2="go back"
+
+    while ( choice!=check) and ( choice!=check2):
+        print( "system message: please make sure to type in a correct command")
+        choice=input( " What do I do? pick up/go back: ")
+        print( "\n")
+
+    print( "\n")
+    if choice==check:
+        hoarder=hoarder + 1
+        print( " " + char_name + " picks up the gem, it brings him a strange sense of achieving something")
+        print( " On pickup he is also assured in his assesion of the room being empty")
+        print( "\n")
+    
+    print( " " + char_name + " decides that the room holds nothing else of interest and decides to go back, after all he is in a hurry")
+    print( " With no other choice left " + char_name + " moves south")
+
+print( " Slowly opening the door leading south, " + char_name + " is met with a strong smell of damp caves and old, almost decaying wood")
+print( " The path forward is very narrow but old lights left by his ancestors light his way.")
+print( " Fortunately he was always smaller than his brethren so he has no issue moving while the path bends right and dissapears out of line of sight")
+print( "\n")
+print( " 'Another door, another room. So much wood and materials wasted to make all of those doors, why would they do it?' He thinks while he opens them")
+print( " The room he enters is shrouded in darkness, only his close vicinity is visible, but there is a faint grounting sound coming from the east")
+print( " Could it be his brother?")
+
+choice=input( " What do I do? look around/go east/think: ")
+check1="go east"
+check2="think"
+check3="look around"
+
+while ( choice!=check1) and ( choice!=check2) and ( choice!=check3):
+        print( "system message: please make sure to type in a correct command")
+        choice=input( " What do I do? look around/go east/think: ")
+
+print( "\n")
+
+if choice==check2:
+    print( " Huh no, that makes no sense, why would my brother be here? It was only I who fell down")
+    choice=input( " What do I do? look around/go east: ")
+    
+    while ( choice!=check1) and ( choice!=check3):
+        print( "system message: please make sure to type in a correct command")
+        choice=input( " What do I do? look around/go east: ")
+    
+    print( "\n")
+      
+if choice==check3:
+
+    print( " Despite unfavourable conditions " + char_name + "s eyeshight is still sharp and in the corrner of his eye he sees a strange oval object.")
+    print( " Upon further inspection it sticks out of the stone like a clumsily made doorhandle")
+    print( " So, being a curious dwarf that he is, " + char_name + " decides to try and wrangle it open")
+    print( " An awful sound of a long unused mechanisms being moved is heard, and old hidden door open ajar")
+    print( " 'A dagger!' he exclaims putting it in his hands. It is a bit rusty, but in time of need it is better than bare hands")
+    comp_perc=comp_perc+5
+    item_hand=1
+    character_stats()
+    print( " There is nothing more in the compartment, so he decides to continue moving east")
+
+print( " On the other end of the room there is a door. Despite his best efforts it refuses to open")
+print( " I can not open it using a handle, but it seems old and not very sturdy, I could probably force it open")
+
+choice=input( " What should I do? attack: ")
+check="attack"
+
+while ( choice!=check):
+        print( "system message: please make sure to type in a correct command")
+        choice=input( " What should I do? attack: ")
+        print( "\n")
+
+print( "\n")
+
+hit=random_check( 3)
+
+if hit==0:
+    print( " He swings with all of his might, yet that was a mistake as he loses his footing and misses the attack")
+    choice=input( " What should I do? attack: ")
+    
+    while ( choice!=check):
+        print( "system message: please make sure to type in a correct command")
+        choice=input( " What should I do? attack: ")
+        print( "\n")
+
+print( " And with the force of his mighty hit, the doors break, no noise is made as the wood crumbles under him")
+print( " So, happy with his success, he moves east once again")
+print( "\n")
+print( " Moving along the corridor he spots a big bear-trap blocking his way")
+
+choice=input( " What should I do? jump over/disarm: ")
+check="jump over"
+check2="disarm"
+
+while ( choice!=check) and ( choice!=check2):
+        print( "system message: please make sure to type in a correct command")
+        choice=input( " What should I do? jump over/disarm: ")
+        print( "\n")
+
+if choice==check2:
+    print( " " + char_name + " using his experiance as a hunter manages to disarm the trap easly and moves safely forward")
+elif random_check(2)==1:
+    print( " Even though it was probably a stupid idea he manages to safely jump over the bear-trap")
+else:
+    print( " Why did he think jumping over a trap was a good idea? It was definitely not one")
+    print( " A sharp sound of the trap closing is heard, he barely manages to avoid its jaws closing on his leg")
+    print( " But it's blades still graze his knee")
+    print(  char_name + " takes 3 point of damage")
+    char_health=char_health-3
+    character_stats()
+
+print( " As he deals with the bear-trap he reaches the end of the corridor")
+print( " Before him is an open space, the sound of grumbling is much louder then before and comes from something before him")
+
+choice=input( "What should i do? look around/move forward: ")
+check="look around"
+check2="move forward"
+
+comp_perc=comp_perc+5
+
+while ( choice!=check) and ( choice!=check2):
+        print( "system message: please make sure to type in a correct command")
+        choice=input( " What should i do? look around/move forward: ")
+        print( "\n")
+
+done=0
+
+if choice==check:
+    print( " On his right there are two old bookshelves, they look like they could be holding something interesting inside")
+    print( " On his left there is an open cavity, it looks just big enough for someone to fit through")
+    print( " And in front of him? Oh god, there is a big orclike monster! It has not spotted him yet, but it's only a matter of time")
+    
+    choice=input( " What should I do? cavity/bookshelves/attack monster: ")
+    check="cavity"
+    check2="bookshelves"
+    check3="attack monster"
+    
+
+    while ( choice!=check) and ( choice!=check2) and ( choice!=check3):
+        print( "system message: please make sure to type in a correct command")
+        choice=input( " What should I do? cavity/bookshelves/attack monster: ")
+        print( "\n")
+
+    if choice==check:
+        print( " The treasures inside the bookshelves are not worth risking his life for")
+        print( " He moves towards the cavity in hopes of escaping unnoticed")
+        print( " Luck is not on his side as he trips on a small rock, alerting the monster of his presence")
+        print( " 'Clank, clank, clank' the orc monster is now running toward him, the sound of it's metal boots grows louder")
+        print( " " + char_name + " sprints as fast as he can, squeezing through the cavity seconds before the monster's blade reaches him")
+        print( " He takes a steadying breath and moves though the corridor. It's better to not think what he just escaped")
+        done=1
+    elif choice==check2:
+        print( " He moves slowly towards the bookshelves, and starts to rummage in them in hopes of finding gems")
+        print( " Just as he finds one and puts it in his pockets, a sharp nail sticking out of the bookshelf prickles his finger")
+        print( "'Auch' he gasps in pain, and quickly realises his mistake, the monster is now looking his way")
+        print( " He should prepare for combat")
+        hoarder=hoarder+1
+
+if done==0:
+    print( " With no other choice he moves forward")
+    print( " The orc-like monster sees him advancing from the other side of a room")
+    print( " Its eyes glow a toxic shade of green and a strong feeling of being assesed as pray scares him deeply")
+    print( " He knows, this is a fight he might die in. He steels his nerves and gets in a fighting stance")
+    print( "\n")
+    print( "system messege: Combat Entered")
+    print( "\n")
+    
+    if combat( 4, 15, 3, char_health)==1:
+        cont=1  
+        
+if cont==0:
+    
+    comp_perc=comp_perc+5
+    merci=merci+1 
+
+    character_stats()
+
+    print( " " + char_name + " moves forward to the next room")
+    print( " There is only one thing in the room, a glowing, floating orb reminding him of a galaxy")
+    print( " Before he can stop himself he touches the orb")
+    print( " A loud wooshing sound can be heard and suddenly, he appears in a room that looks exactly the same, but the orb is gone")
+
+    choice=input( " What should I do? look around/exit: ")
+    check="look around"
+    check2="exit"
+
+    while ( choice!=check) and ( choice!=check2):
+        print( "system message: please make sure to type in a correct command")
+        choice=input( " What should I do? look around/exit: ")
+        print( "\n")
+
+    if choice==check:
+        print( " " + char_name + " after looking around the seemingly empty room is able to spot three dusty rocks in a corner")
+        print( " He picks them up and cleans the dust off of them")
+        print( " 'Those are gems' he says in surprise. A sense of finding something precious brings him momentary respite")
+        hoarder=hoarder+3
+    
+    print( " And so he decides to leave the room, moving slowly though the damp corridor")
+    print( " And once again the grumbling sound is heard")
+    print( " In a tight room before him there is another orc-like monster, this one two times more buff then the first one")
+    print( " 'There is no way around it' He thinks 'I need to fight'")
+    print( " And so " + char_name + " charges into the room in hopes of catching it by surprise")
+    print( "\n")
+    print( "system messege: Combat Entered")
+
+    if combat( 5, 20, 4, char_health)==1:
+        cont=1
+if cont==0:
+    
+    character_stats()
+    comp_perc=comp_perc+10
+    merci=merci+1
+    
+    print( " With the monster dead he is free to move on")
+    print( " He can see two paths before him, one going west with an eerie feeling to it, second one going south")
+    print( " West path feels like a more dangerous yet rewarding option")
+    print( " South path reminds him of a way himself and his brother took to come back home one time they got lost in the mines")
+    
+    choice=input( " What do I do? go west/go south: ")
+    check="go west"
+    check2="go south"
+
+    while ( choice!=check) and ( choice!=check2):
+        print( "system message: please make sure to type in a correct command")
+        choice=input( " What do I do? go west/go south: ")
+        print( "\n")
+
+    if choice==check:
+        print( " 'It may be dangerous, but I feel like I need to go there' he thinks and moves towards the west path")
+        print( " A sleeping Ogre warrior lies in a room filled with rusty weapons")
+        print( " It looks much tougher than the monsters before, it feels like fighting it could hurt a lot")
+        choice=input( " What should I do? attack/go back: ")
+        check="attack"
+        check2="go back"
+
+        while ( choice!=check) and ( choice!=check2):
+            print( "system message: please make sure to type in a correct command")
+            choice=input( " What should I do? attack/go back: ")
+            print( "\n")
+
+        if choice==check:
+            print( "\n")
+            print( "system messege: Combat Entered")
+
+            if combat( 5, 25, 5, char_health)==1:
+                cont=1
+            else:
+                character_stats()
+                merci=merci+1
+                comp_perc=comp_perc+15
+                item_bag=2
+     
+if cont==0:
+    print( " On the defeated monster's body he find a big red key, it looks important")
+    print( " And so he decides to go back ")
+    print( " Coming back to the room he killed a goblin in, he makes a choice to go south this time")
+    print( " " + char_name + " comes accros a room with a table filled with edible looking food")
+    choice=input( " What should I do? look around/eat: ")
+    check="look around"
+    check2="eat"
+
+    while ( choice!=check) and ( choice!=check2):
+        print( "system message: please make sure to type in a correct command")
+        choice=input( " What should I do? look around/eat: ")
+        print( "\n")
+
+    if choice==check:
+        print( " There is a med-kit in a corner of the room")
+        print( " And so he decides to use it")
+        print( " It helps him clean some of his wounds " + char_name + " is healed 10 health points")
+        char_health=char_health+10
+
+        if (char_health>20):
+            char_health=20
+    
+    print( " " + char_name + " is hungry so he decides to eat some of the food")
+    print( " It has an invigorating effect on him")
+    print( " " + char_name + " has been healed for 5 health points")
+    
+    char_health=char_health+5
+
+    if (char_health>20):
+        char_health=20
+    
+    character_stats()
+
+    print( " After taking a moment of respite " + char_name + " decides to move forward, he can feel that he is close to the exit")
+    print( " On his way through yet another tight, dark and smelly corridor he comes across a red door and a golden door")
+    print( " The red door are locked but the golden ones are slightly addjar")
+    print( " Without a key there isn't much he can do")
+
+    if( item_bag==2):
+        print( " In that moment he is reminded of a key he found on that Orc warrior body")
+        print( " He decides to use it, and the doors open")
+        print( " There is a giant great-sword inside, as well as 2 pretty gems")
+        print( " He takes them both and moves on towards the golden door")
+        hoarder=hoarder+2
+        item_hand=2
+        comp_perc=comp_perc+5
+
+    print( " With all that in mind he moves to the last room")
+    print( " The room is big, truly fit for a king")
+    print( " And it seems to be exactly that")
+    print( " Right in the middle of the room there is what he can only describe as a Orc King")
+    print( " To the east of the king there is a giant rock pile and behind it a rope that leads towards light")
+    print( " Kings eyes are closed, he might be asleep")
+    choice=input( " What do I do? attack/go to rope: ")
+    check="attack"
+    check2="go to rope"
+
+    while ( choice!=check) and ( choice!=check2):
+        print( "system message: please make sure to type in a correct command")
+        choice=input( " What do I do? attack/go to rope: ")
+        print( "\n")
+    
+    if check2==choice:
+        print( " " + char_name + " decides to try and use the rope to escape without disturbing the key")
+        print( " Slowly moving behind the rock pile, carefully avoiding his line of sight he takes a hold of the rope")
+        print( " Hand by hand he goes up")
+        print( " He climbs and climbs until he reaches the surface")
+        print( " There he sees his brother running towards him with tears in his eyes")
+        print( " They hug and live happily ever after. That is until the next monster cave in")
+        comp_perc=comp_perc+15
+        comp_perc=comp_perc+hoarder
+        end_credits()
+    else:
+        print( " 'Those monsters have done too much harm already, I need to make sure we are safe from them' " + char_name + " thinks")
+        print( " And so he lunges towards the Orc King")
+
+        if combat( 6, 30, 3, char_health)==0:
+            print( " With the Orc King defeated and his body looted for gems")
+            print( " Where he found three massive sapphires")
+            print( " He is free to safely return to the surface, reuniting with his brother")
+            print( " Safe of all the future monsters")
+            merci=merci+1
+            comp_perc=comp_perc+30+15
+            hoarder=hoarder+3
+            comp_perc=comp_perc+hoarder
+            end_credits()
